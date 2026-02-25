@@ -1,27 +1,43 @@
-﻿import Link from "next/link";
+﻿"use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { demoAccounts } from "@/lib/accounts";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+
+  const onLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    const account = demoAccounts.find((item) => item.email === email.trim() && item.password === password);
+    if (!account) {
+      setMessage("계정 정보가 올바르지 않습니다.");
+      return;
+    }
+    router.push(account.redirectTo);
+  };
+
   return (
     <main className="login-page">
       <section className="login-card">
         <p className="chip">Share House OS</p>
         <h1>쉐어하우스 관리 플랫폼</h1>
-        <p className="muted">운영자/스태프/입주민 계정으로 로그인하세요.</p>
+        <p className="muted">운영자/담당자/입주자 계정으로 로그인하세요.</p>
 
-        <form className="login-form" action="/dashboard">
+        <form className="login-form" onSubmit={onLogin}>
           <label htmlFor="email">이메일</label>
-          <input id="email" name="email" type="email" placeholder="manager@sharehouse.kr" required />
+          <input id="email" name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
           <label htmlFor="password">비밀번호</label>
-          <input id="password" name="password" type="password" placeholder="********" required />
+          <input id="password" name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
-          <button type="submit">로그인</button>
+          <button type="submit" className="login-submit">로그인</button>
         </form>
 
-        <div className="login-footnote">
-          <span>테스트 계정으로 시작하려면 바로 이동</span>
-          <Link href="/dashboard">대시보드로 이동</Link>
-        </div>
+        {message ? <p className="muted">{message}</p> : null}
       </section>
     </main>
   );

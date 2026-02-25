@@ -113,6 +113,24 @@ h1 {
   color: var(--muted);
 }
 
+.login-form input {
+  border: 2px solid #314852 !important;
+  box-shadow: inset 0 0 0 1px #314852;
+  background: #fff !important;
+}
+
+.login-submit {
+  height: 46px !important;
+  margin-top: 10px;
+  background: #0f7a66 !important;
+  color: #fff !important;
+  border: 2px solid #0a5a4b !important;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 input,
 select,
 button {
@@ -278,6 +296,28 @@ button {
 .label {
   color: var(--muted);
   font-size: 13px;
+}
+
+.header-switch {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.switch-inline-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.switch-inline-form select {
+  min-width: 260px;
+  border: 2px solid #314852 !important;
+  background: #fff !important;
+}
+
+.switch-inline-form button {
+  margin-top: 0;
+  height: 44px;
 }
 
 .pipeline-card .pipeline-layout {
@@ -521,6 +561,19 @@ button {
 
   .pipeline-card .pipeline-layout {
     grid-template-columns: 1fr;
+  }
+
+  .header-switch {
+    justify-content: stretch;
+  }
+
+  .switch-inline-form {
+    width: 100%;
+  }
+
+  .switch-inline-form select {
+    min-width: 0;
+    flex: 1;
   }
 
   .inline-form.three-col {

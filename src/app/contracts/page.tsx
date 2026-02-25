@@ -153,6 +153,7 @@ export default function ContractsPage() {
   };
 
   const registerContract = () => {
+    const contractFile = contractForm.contractFile;
     if (
       !contractForm.resident ||
       !contractForm.room.trim() ||
@@ -161,7 +162,7 @@ export default function ContractsPage() {
       !contractForm.deposit.trim() ||
       !contractForm.rent.trim() ||
       !contractForm.status ||
-      !contractForm.contractFile
+      !contractFile
     ) {
       setModalMessage("계약자, 호실, 계약기간, 금액, 상태, 계약서 이미지를 모두 입력하세요.");
       return;
@@ -182,8 +183,8 @@ export default function ContractsPage() {
         moveInDate: contractForm.moveInDate || contractForm.startDate,
         moveOutDate: contractForm.moveOutDate || contractForm.endDate,
         checklistProgress: contractForm.checklistProgress.trim() || "0/10",
-        contractFileName: contractForm.contractFile.name,
-        contractFileUrl: URL.createObjectURL(contractForm.contractFile),
+        contractFileName: contractFile.name,
+        contractFileUrl: URL.createObjectURL(contractFile),
       },
       ...prev,
     ]);

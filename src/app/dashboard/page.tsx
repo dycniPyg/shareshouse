@@ -1,4 +1,8 @@
-﻿import { AppShell, StatusPill } from "@/components/app-shell";
+﻿"use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { AppShell, StatusPill } from "@/components/app-shell";
 import {
   pipelineStats,
   residentBillingAccounts,
@@ -9,11 +13,42 @@ import {
 } from "@/lib/mock-data";
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const [selectedView, setSelectedView] = useState("/staff/finance");
+  const viewOptions = [
+    { label: "정산 담당 화면", href: "/staff/finance" },
+    { label: "시설 담당 화면", href: "/staff/facility" },
+    { label: "청소 담당 화면", href: "/staff/cleaning" },
+    { label: "콜 담당 화면", href: "/staff/call" },
+    { label: "초기 세팅 담당 화면", href: "/staff/setup" },
+    { label: "입주자 화면", href: "/resident" },
+  ];
+
   return (
     <AppShell
       title="운영 대시보드"
       description="공실, 미납, 민원, 청소 KPI와 입주민 월간 루틴 이행 상태를 한 화면에서 관리합니다."
     >
+      <section className="header-switch">
+        <form className="switch-inline-form" onSubmit={(e) => e.preventDefault()}>
+          <select
+            id="view-select"
+            aria-label="담당자 또는 입주자 화면 선택"
+            value={selectedView}
+            onChange={(e) => setSelectedView(e.target.value)}
+          >
+            {viewOptions.map((item) => (
+              <option key={item.href} value={item.href}>
+                {item.label}
+              </option>
+            ))}
+          </select>
+          <button type="button" className="primary-button" onClick={() => router.push(selectedView)}>
+            화면 이동
+          </button>
+        </form>
+      </section>
+
       <section className="grid four">
         {summaryCards.map((card) => (
           <article className="card" key={card.label}>
