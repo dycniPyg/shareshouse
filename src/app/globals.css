@@ -159,6 +159,18 @@ button {
   border-radius: 8px;
 }
 
+.table-link-button {
+  height: auto;
+  margin-top: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #0f5f9a;
+  text-decoration: underline;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .login-footnote {
   display: flex;
   align-items: center;
@@ -173,8 +185,35 @@ button {
   font-weight: 700;
 }
 
-.app-shell {
+.shell-frame {
   min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.global-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  border-bottom: 2px solid #314852;
+  background: #ffffff;
+}
+
+.global-header h2 {
+  font-size: 18px;
+  color: #1b2a2f;
+}
+
+.global-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-shell {
+  min-height: 0;
   display: grid;
   grid-template-columns: 250px 1fr;
 }
@@ -195,6 +234,12 @@ button {
 .sidebar p {
   font-size: 13px;
   color: #b9d3d9;
+}
+
+.side-user {
+  font-size: 12px !important;
+  color: #9cc0c9 !important;
+  word-break: break-all;
 }
 
 .sidebar nav {
@@ -228,6 +273,26 @@ button {
   gap: 16px;
 }
 
+.top-user {
+  font-size: 13px;
+  color: #334952;
+  word-break: break-all;
+}
+
+.top-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 2px solid #0a5a4b;
+  background: #0f7a66;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .content-header h1 {
   font-size: 30px;
 }
@@ -235,6 +300,20 @@ button {
 .content-header p {
   margin-top: 6px;
   color: var(--muted);
+}
+
+.content-body {
+  display: grid;
+  gap: 16px;
+}
+
+.global-footer {
+  text-align: center;
+  font-size: 13px;
+  color: #4f646e;
+  padding: 10px 12px;
+  border-top: 2px solid #314852;
+  background: #ffffff;
 }
 
 .grid {
@@ -546,6 +625,11 @@ button {
     grid-template-columns: 1fr;
   }
 
+  .global-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .sidebar {
     gap: 10px;
   }
@@ -602,5 +686,10 @@ button {
 
   .sidebar nav {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .global-header-right {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

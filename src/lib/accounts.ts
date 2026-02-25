@@ -1,8 +1,11 @@
-﻿export type Account = {
+export type Account = {
   role: string;
   email: string;
   password: string;
   redirectTo: string;
+  userType?: "담당자" | "입주자";
+  userName?: string;
+  room?: string;
 };
 
 export const demoAccounts: Account[] = [

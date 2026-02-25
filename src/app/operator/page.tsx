@@ -1,4 +1,9 @@
-﻿import { RoleShell } from "@/components/role-shell";
+﻿"use client";
+
+import { useState } from "react";
+import { RoleShell } from "@/components/role-shell";
+import { Account } from "@/lib/accounts";
+import { saveCustomAccounts, useCustomAccountsStore } from "@/lib/auth-client";
 
 const operatorMenu = [
   { href: "/operator", label: "운영자 대시보드" },
@@ -10,7 +15,51 @@ const operatorMenu = [
   { href: "/resident", label: "입주자 화면" },
 ];
 
+const roleRedirectMap: Record<string, string> = {
+  "운영자": "/dashboard",
+  "정산 담당": "/staff/finance",
+  "시설 담당": "/staff/facility",
+  "청소 담당": "/staff/cleaning",
+  "콜 담당": "/staff/call",
+  "초기 세팅 담당": "/staff/setup",
+  "입주자": "/resident",
+};
+
 export default function OperatorPage() {
+  const customAccounts = useCustomAccountsStore();
+  const [message, setMessage] = useState("");
+  const [form, setForm] = useState({
+    role: "정산 담당",
+    email: "",
+    password: "",
+  });
+
+  const registerAccount = () => {
+    const email = form.email.trim();
+    const password = form.password.trim();
+    if (!email || !password) {
+      setMessage("이메일과 비밀번호를 입력하세요.");
+      return;
+    }
+
+    if (customAccounts.some((item) => item.email === email)) {
+      setMessage("이미 등록된 이메일입니다.");
+      return;
+    }
+
+    const next: Account = {
+      role: form.role,
+      email,
+      password,
+      redirectTo: roleRedirectMap[form.role] ?? "/dashboard",
+    };
+
+    const updated = [next, ...customAccounts];
+    saveCustomAccounts(updated);
+    setMessage(`${next.role} 계정이 등록되었습니다.`);
+    setForm((prev) => ({ ...prev, email: "", password: "" }));
+  };
+
   return (
     <RoleShell
       roleLabel="운영자"
@@ -35,6 +84,50 @@ export default function OperatorPage() {
             <tr><td>청소 담당</td><td>호실/복도/계단 청소 인증</td><td>12건</td><td>1건</td><td>정상</td></tr>
             <tr><td>콜 담당</td><td>공지 발송/애로사항 응답</td><td>14건</td><td>2건</td><td>주의</td></tr>
             <tr><td>초기 세팅 담당</td><td>주택 등록/구조도 업로드</td><td>4건</td><td>0건</td><td>정상</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section className="card">
+        <h3>담당자 로그인 계정 등록</h3>
+        <form className="inline-form three-col" onSubmit={(e) => e.preventDefault()}>
+          <div>
+            <label htmlFor="role">역할</label>
+            <select id="role" value={form.role} onChange={(e) => setForm((p) => ({ ...p, role: e.target.value }))}>
+              <option>정산 담당</option>
+              <option>시설 담당</option>
+              <option>청소 담당</option>
+              <option>콜 담당</option>
+              <option>초기 세팅 담당</option>
+              <option>입주자</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="email">이메일</label>
+            <input id="email" type="email" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} />
+          </div>
+          <div>
+            <label htmlFor="password">비밀번호</label>
+            <input id="password" type="text" value={form.password} onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))} />
+          </div>
+          <button type="button" className="primary-button" onClick={registerAccount}>계정 등록</button>
+        </form>
+        {message ? <p className="muted">{message}</p> : null}
+      </section>
+
+      <section className="card">
+        <h3>운영자가 등록한 로그인 계정</h3>
+        <table>
+          <thead><tr><th>역할</th><th>이메일</th><th>비밀번호</th><th>로그인 후 화면</th></tr></thead>
+          <tbody>
+            {customAccounts.map((account) => (
+              <tr key={account.email}>
+                <td>{account.role}</td>
+                <td>{account.email}</td>
+                <td>{account.password}</td>
+                <td>{account.redirectTo}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </section>

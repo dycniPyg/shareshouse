@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { demoAccounts } from "@/lib/accounts";
+import { getAllAccounts, setCurrentUser } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -12,11 +12,12 @@ export default function LoginPage() {
 
   const onLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const account = demoAccounts.find((item) => item.email === email.trim() && item.password === password);
+    const account = getAllAccounts().find((item) => item.email === email.trim() && item.password === password);
     if (!account) {
       setMessage("계정 정보가 올바르지 않습니다.");
       return;
     }
+    setCurrentUser({ email: account.email, role: account.role, redirectTo: account.redirectTo });
     router.push(account.redirectTo);
   };
 
